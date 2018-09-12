@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  name: Project1
+  description: Description1
+
+two:
+  user: two
+  name: Project2
+  description: Description2
