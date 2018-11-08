@@ -42,6 +42,16 @@ class ProjectTest < ActiveSupport::TestCase
         "id"=>project.id,
         "name"=>project.name,
         "description"=>project.description,
+        "timeline" => {
+            "items" => [
+                {
+                    "title"=>"Title",
+                    "description"=>"Description",
+                    "date"=>"10/10/2018",
+                    "imageUrl"=>"imageUrl"
+                }
+            ]
+        },
         "ownerFull"=>{
             "id"=>user.id,
             "email"=>user.email,

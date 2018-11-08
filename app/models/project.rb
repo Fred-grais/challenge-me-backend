@@ -12,7 +12,7 @@ class Project < ApplicationRecord
   }
 
   FULL_ATTRIBUTES = {
-    attributes: [:id, :name, :description],
+    attributes: [:id, :name, :description, :timeline],
     methods: [:owner_full]
   }
 
