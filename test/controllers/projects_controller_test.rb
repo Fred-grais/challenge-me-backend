@@ -58,6 +58,16 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         "id"=>@project.id,
         "name"=>@project.name,
         "description"=>@project.description,
+        "timeline" => {
+            "items" => [
+                {
+                    "title"=>"Title",
+                    "description"=>"Description",
+                    "date"=>"10/10/2018",
+                    "imageUrl"=>"imageUrl"
+                }
+            ]
+        },
         "ownerFull"=>{
             "id"=>@project.user.id,
             "position"=>@project.user.position,

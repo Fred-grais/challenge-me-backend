@@ -75,6 +75,16 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
           "id"=>@project.id,
           "name"=>@project.name,
           "description"=>@project.description,
+          "timeline" => {
+            "items" => [
+              {
+                "title"=>"Title",
+                "description"=>"Description",
+                "date"=>"10/10/2018",
+                "imageUrl"=>"imageUrl"
+              }
+            ]
+          },
           "ownerFull"=>{
             "id"=>@user.id,
             "position"=>@user.position,
@@ -174,7 +184,17 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
       @params = {
         project: {
           name: 'Updated Name',
-          description: 'Updated Description'
+          description: 'Updated Description',
+          timeline: {
+            items: [
+              {
+                title: 'title1',
+                description: 'description1',
+                date: '10/10/2018',
+                imageUrl: 'imageUrl'
+              }
+            ]
+          }
         }
       }
 
@@ -205,6 +225,16 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
             "id"=>@project.id,
             "name"=>@project.name,
             "description"=>@project.description,
+            "timeline" => {
+              "items" => [
+                {
+                  "title" => 'title1',
+                  "description" => 'description1',
+                  "date" => '10/10/2018',
+                  "imageUrl" => 'imageUrl'
+                }
+              ]
+            },
             "ownerFull"=>{
                 "id"=>@user.id,
                 "position"=>@user.position,
