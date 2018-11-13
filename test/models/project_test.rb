@@ -35,13 +35,15 @@ class ProjectTest < ActiveSupport::TestCase
   end
 
   test '#as_json, preview = false, for_front = true' do
-    project = FactoryBot.create(:project)
+    project = FactoryBot.create(:project, challenges_needed_list: ['challenge1', 'challenge2'], activity_sector_list: ['sector1', 'sector2'])
 
     user = project.user
     expected = {
         "id"=>project.id,
         "name"=>project.name,
         "description"=>project.description,
+        "activitySectorList"=>["sector1", "sector2"],
+        "challengesNeededList"=>["challenge1", "challenge2"],
         "timeline" => {
             "items" => [
                 {
@@ -61,6 +63,22 @@ class ProjectTest < ActiveSupport::TestCase
         }
     }
     assert_equal(expected, project.as_json(preview: false, for_front: true))
+  end
+
+  test '#activity_sector_list' do
+    project = FactoryBot.create(:project)
+
+    project.activity_sector_list.add('sector1', 'sector2')
+
+    assert_equal(project.activity_sector_list, ['sector1', 'sector2'])
+  end
+
+  test '#challenges_needed_list' do
+    project = FactoryBot.create(:project)
+
+    project.challenges_needed_list.add('challenge1', 'challenge2')
+
+    assert_equal(project.challenges_needed_list, ['challenge1', 'challenge2'])
   end
 
 end

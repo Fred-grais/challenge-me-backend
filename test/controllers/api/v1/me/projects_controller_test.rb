@@ -49,7 +49,7 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
   context 'show' do
     setup do
       @user = users(:one)
-      @project = FactoryBot.create(:project, user: @user)
+      @project = FactoryBot.create(:project, challenges_needed_list: ['challenge1', 'challenge2'], activity_sector_list: ['sector1', 'sector2'], user: @user)
     end
 
     context 'Not Authenticated' do
@@ -75,6 +75,8 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
           "id"=>@project.id,
           "name"=>@project.name,
           "description"=>@project.description,
+          "activitySectorList"=>["sector2", "sector1"],
+          "challengesNeededList"=>["challenge2", "challenge1"],
           "timeline" => {
             "items" => [
               {
@@ -105,9 +107,11 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
     setup do
       @user = users(:one)
       @params = {
-          project: {
-            name: 'Name',
-            description: 'Description'
+        project: {
+          name: 'Name',
+          description: 'Description',
+          challenges_needed_list: ['challenge1', 'challenge2'],
+          activity_sector_list: ['sector1', 'sector2']
         }
       }
     end
@@ -185,6 +189,8 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
         project: {
           name: 'Updated Name',
           description: 'Updated Description',
+          challenges_needed_list: ['challenge1', 'challenge2'],
+          activity_sector_list: ['sector1', 'sector2'],
           timeline: {
             items: [
               {
@@ -225,6 +231,8 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
             "id"=>@project.id,
             "name"=>@project.name,
             "description"=>@project.description,
+            "activitySectorList" => ['sector1', 'sector2'],
+            "challengesNeededList" => ['challenge1', 'challenge2'],
             "timeline" => {
               "items" => [
                 {

@@ -41,9 +41,10 @@ module Api
         end
 
         private
+
           # Use callbacks to share common setup or constraints between actions.
           def set_project_and_check_user
-            @project = Project.find(params[:id])
+            @project = Project.includes(:activity_sectors).find(params[:id])
             if @project.user_id != current_user.id
               render_user_forbidden_error
             end
@@ -51,7 +52,7 @@ module Api
 
           # Only allow a trusted parameter "white list" through.
           def project_params
-            params.require(:project).permit(:name, :description, timeline: [items: [:title, :description, :date, :imageUrl]])
+            params.require(:project).permit(:name, :description, activity_sector_list: [], challenges_needed_list: [], timeline: [items: [:title, :description, :date, :imageUrl]])
           end
       end
     end

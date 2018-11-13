@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ProjectsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @project = FactoryBot.create(:project)
+    @project = FactoryBot.create(:project, challenges_needed_list: ['challenge1', 'challenge2'], activity_sector_list: ['sector1', 'sector2'])
   end
 
   test "should get index" do
@@ -58,6 +58,8 @@ class ProjectsControllerTest < ActionDispatch::IntegrationTest
         "id"=>@project.id,
         "name"=>@project.name,
         "description"=>@project.description,
+        "activitySectorList"=>["sector2", "sector1"],
+        "challengesNeededList"=>["challenge2", "challenge1"],
         "timeline" => {
             "items" => [
                 {

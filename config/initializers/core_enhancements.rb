@@ -24,4 +24,28 @@ class Hash
 
     self
   end
+
+  def convert_keys_to_underscore
+    self.transform_keys! do |k|
+      if self[k].is_a?(Hash)
+        self[k].convert_keys_to_underscore
+      end
+
+      k.to_s.underscore
+    end
+  end
+end
+
+class ActionController::Parameters
+
+  def convert_keys_to_underscore
+    self.transform_keys! do |k|
+      if self[k].is_a?(ActionController::Parameters)
+        self[k].convert_keys_to_underscore
+      end
+
+      k.underscore
+    end
+  end
+
 end
