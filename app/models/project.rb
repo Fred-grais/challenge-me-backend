@@ -2,6 +2,8 @@ class Project < ApplicationRecord
 
   include FrontDataGeneration
 
+  acts_as_taggable_on :activity_sectors, :challenges_needed
+
   belongs_to :user
 
   validates_uniqueness_of :name, scope: :user_id
@@ -13,7 +15,7 @@ class Project < ApplicationRecord
 
   FULL_ATTRIBUTES = {
     attributes: [:id, :name, :description, :timeline],
-    methods: [:owner_full]
+    methods: [:owner_full, :activity_sector_list, :challenges_needed_list]
   }
 
   def owner_preview

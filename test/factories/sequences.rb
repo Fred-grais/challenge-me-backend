@@ -7,5 +7,5 @@ FactoryBot.define do
   sequence(:name) { |n| "name#{n}" }
   sequence(:description) { |n| "description#{n}" }
 
-
+  sequence(:taggings_count) { |n| n }
 end

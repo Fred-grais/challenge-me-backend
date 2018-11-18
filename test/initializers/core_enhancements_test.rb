@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class ProjectTest < ActiveSupport::TestCase
+class CoreEnhancementsTest < ActiveSupport::TestCase
 
 
   test 'String#to_lower_camelcase' do
@@ -35,5 +35,65 @@ class ProjectTest < ActiveSupport::TestCase
     }
 
     assert_equal(expected, hash.convert_keys_to_camelcase)
+  end
+
+  test 'Hash#convert_keys_to_underscore' do
+    hash = {
+            person: {
+              name: 'Francesco',
+              age:  22,
+              role: 'admin'
+            },
+            testUnderscore: {
+              nestedUnderscore: {
+                underScoreTest: 1
+              }
+            }
+          }
+
+    expected = {
+        'person' => {
+            'name' => 'Francesco',
+            'age' => 22,
+            'role' => 'admin'
+        },
+        'test_underscore' => {
+            'nested_underscore' => {
+                'under_score_test' => 1
+            }
+        }
+    }
+
+    assert_equal(expected, hash.convert_keys_to_underscore)
+  end
+
+  test 'ActionController::Parameters#convert_keys_to_underscore' do
+    params = ActionController::Parameters.new({
+                                                  person: {
+                                                      name: 'Francesco',
+                                                      age:  22,
+                                                      role: 'admin'
+                                                  },
+                                                  testUnderscore: {
+                                                      nestedUnderscore: {
+                                                          underScoreTest: 1
+                                                      }
+                                                  }
+                                              })
+
+    expected = {
+        'person' => {
+          'name' => 'Francesco',
+          'age' => 22,
+          'role' => 'admin'
+        },
+        'test_underscore' => {
+          'nested_underscore' => {
+            'under_score_test' => 1
+          }
+        }
+    }
+
+    assert_equal(expected, params.convert_keys_to_underscore)
   end
 end
