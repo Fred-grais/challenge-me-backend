@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_13_001938) do
+ActiveRecord::Schema.define(version: 2018_11_22_002708) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "project_kpis", force: :cascade do |t|
+    t.bigint "project_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_project_kpis_on_project_id", unique: true
+  end
 
   create_table "projects", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -21,7 +28,7 @@ ActiveRecord::Schema.define(version: 2018_11_13_001938) do
     t.string "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.json "timeline", default: {}
+    t.json "timeline", default: {"items"=>[]}
     t.index ["user_id", "name"], name: "index_projects_on_user_id_and_name", unique: true
     t.index ["user_id"], name: "index_projects_on_user_id"
   end
@@ -75,5 +82,6 @@ ActiveRecord::Schema.define(version: 2018_11_13_001938) do
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
 
+  add_foreign_key "project_kpis", "projects"
   add_foreign_key "projects", "users"
 end
