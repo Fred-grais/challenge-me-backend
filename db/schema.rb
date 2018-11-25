@@ -10,10 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_13_001938) do
+ActiveRecord::Schema.define(version: 2018_11_25_001017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "podcasts", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "description", null: false
+    t.string "categories", default: [], array: true
+    t.string "duration", null: false
+    t.datetime "publishing_date", null: false
+    t.string "thumbnail_url"
+    t.string "content_url", null: false
+    t.string "original_link"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["title"], name: "index_podcasts_on_title", unique: true
+  end
 
   create_table "projects", force: :cascade do |t|
     t.integer "user_id", null: false

@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
   resources :projects, only: [:index, :show]
 
+  resources :podcasts, only: [:index]
+
   namespace :api do
     namespace :v1 do
 
