@@ -26,6 +26,11 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
              headers: :any,
              methods: [:get, :options]
 
+    resource '/podcasts',
+             headers: :any,
+             methods: [:get, :options]
+
+
     resource '/api/*/tags',
              headers: :any,
              expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
