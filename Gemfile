@@ -41,6 +41,7 @@ end
 
 group :test do
   gem 'shoulda'
+  gem 'mocha'
 end
 
 
@@ -51,3 +52,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'devise_token_auth'
 
 gem 'acts-as-taggable-on', '~> 6.0'
+
+gem 'httparty'
+gem 'nokogiri'
