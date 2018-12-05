@@ -4,6 +4,8 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  acts_as_messageable
+
   include DeviseTokenAuth::Concerns::User
   include FrontDataGeneration
 
@@ -33,4 +35,8 @@ class User < ApplicationRecord
   #
   #   options[:for_front].present? ? json.convert_keys_to_camelcase : json
   # end
+
+  def mailboxer_email(object)
+    'frederic.grais@gmail.com'
+  end
 end

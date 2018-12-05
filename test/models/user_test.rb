@@ -2,6 +2,11 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
 
+  test '##acts_as_messageable' do
+    user = FactoryBot.create(:user)
+    assert(user.respond_to?(:send_message))
+  end
+
   test '#as_json, preview = true, for_front = true' do
     user = FactoryBot.create(:user)
 
