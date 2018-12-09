@@ -43,4 +43,8 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  ENV['KLIPFOLIO_API_KEY'] = '123'
+  ENV['KLIPFOLIO_BASE_API'] = 'https://test-klipfolio-mocked.com'
+
 end

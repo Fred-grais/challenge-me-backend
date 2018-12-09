@@ -10,9 +10,11 @@ class Authentication::RegistrationsController < DeviseTokenAuth::RegistrationsCo
   # end
 
   # POST /resource
-  # def create
-  #   super
-  # end
+  def create
+    super do |resource|
+      # Here you can access the newly created user
+    end
+  end
 
   # GET /resource/edit
   # def edit
