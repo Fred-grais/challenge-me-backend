@@ -24,6 +24,10 @@ Rails.application.routes.draw do
 
       namespace :me do
         resources :projects, only: [:index, :show, :create, :edit, :update, :destroy]
+
+        resources :messages, only: [:create]
+
+        resources :conversations, only: [:index, :show]
       end
     end
   end

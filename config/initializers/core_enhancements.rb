@@ -9,26 +9,31 @@ end
 class Hash
 
   def convert_keys_to_camelcase
-    self.keys.each do |k|
+    self.transform_keys! do |k|
       if self[k].is_a?(Hash)
         self[k].convert_keys_to_camelcase
+      elsif self[k].is_a?(Array)
+        self[k].each do |item|
+          if item.is_a?(Hash)
+            item.convert_keys_to_camelcase
+          end
+        end
       end
 
-      camelcased_key = k.to_s.to_lower_camelcase
-
-      if camelcased_key != k
-        self[camelcased_key] = self[k]
-        self.delete(k)
-      end
+      k.to_s.to_lower_camelcase
     end
-
-    self
   end
 
   def convert_keys_to_underscore
     self.transform_keys! do |k|
       if self[k].is_a?(Hash)
         self[k].convert_keys_to_underscore
+      elsif self[k].is_a?(Array)
+        self[k].each do |item|
+          if item.is_a?(Hash)
+            item.convert_keys_to_underscore
+          end
+        end
       end
 
       k.to_s.underscore
