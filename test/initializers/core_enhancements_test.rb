@@ -20,7 +20,12 @@ class CoreEnhancementsTest < ActiveSupport::TestCase
             'sub_sub_hash' => {
                 'sub_sub_hash_key' => 'test'
             }
-        }
+        },
+        'sub_array' => [
+            {
+                'sub_array_hash_key' => 'test'
+            }
+        ]
     }
 
     expected = {
@@ -31,7 +36,12 @@ class CoreEnhancementsTest < ActiveSupport::TestCase
             'subSubHash' => {
                 'subSubHashKey' => 'test'
             }
-        }
+        },
+        'subArray' => [
+            {
+                'subArrayHashKey' => 'test'
+            }
+        ]
     }
 
     assert_equal(expected, hash.convert_keys_to_camelcase)
@@ -39,17 +49,24 @@ class CoreEnhancementsTest < ActiveSupport::TestCase
 
   test 'Hash#convert_keys_to_underscore' do
     hash = {
-            person: {
-              name: 'Francesco',
-              age:  22,
-              role: 'admin'
-            },
-            testUnderscore: {
-              nestedUnderscore: {
-                underScoreTest: 1
-              }
-            }
+      person: {
+        name: 'Francesco',
+        age:  22,
+        role: 'admin'
+      },
+      testUnderscore: {
+        nestedUnderscore: {
+          underScoreTest: 1
+        }
+      },
+      testUnderscoreArray: [
+        {
+          nestedUnderscoreHash: {
+            underscoreTest: 1
           }
+        }
+      ]
+    }
 
     expected = {
         'person' => {
@@ -61,7 +78,14 @@ class CoreEnhancementsTest < ActiveSupport::TestCase
             'nested_underscore' => {
                 'under_score_test' => 1
             }
-        }
+        },
+        'test_underscore_array' => [
+            {
+                'nested_underscore_hash' => {
+                    'underscore_test' => 1
+                }
+            }
+        ]
     }
 
     assert_equal(expected, hash.convert_keys_to_underscore)
