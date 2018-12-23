@@ -39,6 +39,8 @@ jobs:
           command: |
             bundle install --jobs=4 --retry=3 --path vendor/bundle
 
+      - run: sudo apt install -y postgresql-client || true
+
       - save_cache:
           paths:
           - ./vendor/bundle
@@ -48,8 +50,8 @@ jobs:
       - run:
           name: Set up DB
           command: |
-            bundle exec rake db:create db:schema:load --trace
-            bundle exec rake db:migrate
+            bundle exec rake db:create
+            bundle exec rake db:structure:load --trace
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/api_test"
 

@@ -8,6 +8,8 @@ class User < ApplicationRecord
   include FrontDataGeneration
 
   has_many :projects
+  has_many :conversations
+  has_many :messages, foreign_key: :sender_id
 
   PREVIEW_ATTRIBUTES = {
       attributes: [:id, :first_name, :last_name, :position],
@@ -24,13 +26,7 @@ class User < ApplicationRecord
       method: []
   }
 
-  # def as_json(options)
-  #   json = if options[:preview].present?
-  #            super(only: PREVIEW_ATTRIBUTES)
-  #          else
-  #            super(only: FULL_ATTRIBUTES)
-  #          end
-  #
-  #   options[:for_front].present? ? json.convert_keys_to_camelcase : json
-  # end
+  def conversations
+    Conversation.where('recipients @> ARRAY[?]::varchar[]', self.email)
+  end
 end

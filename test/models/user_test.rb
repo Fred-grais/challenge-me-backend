@@ -26,4 +26,17 @@ class UserTest < ActiveSupport::TestCase
     }
     assert_equal(expected, user.as_json(preview: false, for_front: true))
   end
+
+  test 'user has many conversations' do
+    conv = FactoryBot.create(:conversation)
+    conv2 = FactoryBot.create(:conversation)
+    conv3 = FactoryBot.create(:conversation)
+
+    user = FactoryBot.create(:user)
+
+    conv.update(recipients: conv.recipients << user.email)
+    conv2.update(recipients: conv2.recipients << user.email)
+
+    assert_same_elements([conv, conv2], user.conversations)
+  end
 end
