@@ -55,3 +55,5 @@ gem 'acts-as-taggable-on', '~> 6.0'
 
 gem 'httparty'
 gem 'nokogiri'
+
+gem 'hashdiff'

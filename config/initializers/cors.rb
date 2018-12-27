@@ -36,6 +36,11 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
              expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
              methods: [:get, :options]
 
+    resource '/api/*/users',
+             headers: :any,
+             expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+             methods: [:get, :options]
+
     resource '/api/*/me/projects/*',
              headers: :any,
              expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
@@ -49,7 +54,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     resource '/api/*/me/conversations',
              headers: :any,
              expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
-             methods: [:get, :options]
+             methods: [:get, :post, :options]
 
     resource '/api/*/me/messages',
              headers: :any,
