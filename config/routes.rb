@@ -21,13 +21,14 @@ Rails.application.routes.draw do
     namespace :v1 do
 
       resources :tags, only: [:index]
+      resources :users, only: [:index]
 
       namespace :me do
         resources :projects, only: [:index, :show, :create, :edit, :update, :destroy]
 
         resources :messages, only: [:create]
 
-        resources :conversations, only: [:index, :show]
+        resources :conversations, only: [:index, :show, :create]
       end
     end
   end

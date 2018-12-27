@@ -37,66 +37,23 @@ class Api::V1::Me::MessagesControllerTest < ActionDispatch::IntegrationTest
           message1 = @convs[0].messages.first
           message2 = @convs[1].messages.first
           message3 = @convs[2].messages.first
-          expected = [
-            {
-              "id"=>@convs[0].id,
-              "expandedRecipients"=>
-                [
-                  {
-                    "id"=>message1.sender.id,
-                    "firstName"=>message1.sender.first_name,
-                    "lastName"=>message1.sender.last_name,
-                    "position"=>message1.sender.position
-                  },
-                  {
-                    "id"=>@user.id,
-                    "firstName"=>@user.first_name,
-                    "lastName"=>@user.last_name,
-                    "position"=>@user.position
-                  }
-                ],
-              "lastMessagePreview"=>message1.message
-            },
-            {
-              "id"=>@convs[1].id,
-              "expandedRecipients"=>
-                [
-                  {
-                    "id"=>message2.sender.id,
-                    "firstName"=>message2.sender.first_name,
-                    "lastName"=>message2.sender.last_name,
-                    "position"=>message2.sender.position
-                  },
-                  {
-                    "id"=>@user.id,
-                    "firstName"=>@user.first_name,
-                    "lastName"=>@user.last_name,
-                    "position"=>@user.position
-                  }
-                ],
-              "lastMessagePreview"=>message2.message
-            },
-            {
-              "id"=>@convs[2].id,
-              "expandedRecipients"=>
-                [
-                  {
-                    "id"=>message3.sender.id,
-                    "firstName"=>message3.sender.first_name,
-                    "lastName"=>message3.sender.last_name,
-                    "position"=>message3.sender.position
-                  },
-                  {
-                    "id"=>@user.id,
-                    "firstName"=>@user.first_name,
-                    "lastName"=>@user.last_name,
-                    "position"=>@user.position
-                  }
-                ],
-              "lastMessagePreview"=>message3.message
-            }
-          ]
-          assert_same_elements(expected, JSON.parse(@response.body))
+          expected = [{
+            "id"=>@convs[0].id,
+            "expandedRecipients"=> @convs[0].expanded_recipients.each(&:convert_keys_to_camelcase),
+            "lastMessagePreview"=>message1.message
+          },
+          {
+            "id"=>@convs[1].id,
+            "expandedRecipients"=>@convs[1].expanded_recipients.each(&:convert_keys_to_camelcase),
+            "lastMessagePreview"=>message2.message
+          },
+          {
+            "id"=>@convs[2].id,
+            "expandedRecipients"=>@convs[2].expanded_recipients.each(&:convert_keys_to_camelcase),
+            "lastMessagePreview"=>message3.message
+          }]
+
+          assert_equal(HashDiff.diff(expected, JSON.parse(@response.body)), [])
         end
       end
     end
@@ -153,5 +110,87 @@ class Api::V1::Me::MessagesControllerTest < ActionDispatch::IntegrationTest
         )
       end
     end
+  end
+
+  context 'create' do
+
+    setup do
+      @recipient = FactoryBot.create(:user)
+
+      @params = {
+          conversation: {
+              recipients: [@recipient.email],
+              message: 'first message'
+          }
+      }
+    end
+    context 'Not Authenticated' do
+
+      should 'render an unauthorized error' do
+        post api_v1_me_conversations_url(@params)
+
+        assert_response :unauthorized
+        assert_equal({"errors"=>["You need to sign in or sign up before continuing."]}, JSON.parse(@response.body))
+      end
+    end
+
+    context 'Authenticated' do
+
+      setup do
+        @user = FactoryBot.create(:user)
+      end
+
+      should 'create a new conversation' do
+        assert_difference 'Conversation.count', +1 do
+          authenticate_user(@user) do |authentication_headers|
+            post api_v1_me_conversations_url(@params), headers: authentication_headers
+          end
+        end
+
+        assert_response :success
+
+        conversation = Conversation.last
+        expected = {
+          "success"=>true,
+          "preview"=>
+            {
+              "id"=>conversation.id,
+              "expandedRecipients"=> conversation.expanded_recipients.each(&:convert_keys_to_camelcase),
+              "lastMessagePreview"=>conversation.last_message_preview,
+            },
+          "full"=>
+            {
+              "id"=>conversation.id,
+              "expandedRecipients"=> conversation.expanded_recipients.each(&:convert_keys_to_camelcase),
+              "displayedMessages"=> conversation.displayed_messages.each(&:convert_keys_to_camelcase).as_json
+            }
+        }
+        assert_equal(HashDiff.diff(expected, JSON.parse(@response.body)), [])
+      end
+
+      should 'should not create a new conversation' do
+        @user.conversations.create(recipients: [@recipient.email])
+
+        assert_no_difference 'Conversation.count' do
+          authenticate_user(@user) do |authentication_headers|
+            post api_v1_me_conversations_url(@params), headers: authentication_headers
+          end
+        end
+
+        assert_response :unprocessable_entity
+        assert_equal({"success"=>false, "errors"=>["recipients"]}, JSON.parse(@response.body))
+      end
+
+      should 'expects the correct params' do
+        authenticate_user(@user) do |authentication_headers|
+          post api_v1_me_conversations_url({}), headers: authentication_headers
+        end
+
+        assert_response :unprocessable_entity
+        assert_equal({"success"=>false, "errors"=>["param is missing or the value is empty: conversation"]}, JSON.parse(@response.body))
+
+      end
+    end
+
   end
 end
