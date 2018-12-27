@@ -23,6 +23,20 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
+-- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pg_trgm; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
+
+
+--
 -- Name: sort_array(anyarray); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -300,37 +314,6 @@ ALTER SEQUENCE public.podcasts_id_seq OWNED BY public.podcasts.id;
 
 
 --
--- Name: project_kpis; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.project_kpis (
-    id bigint NOT NULL,
-    project_id bigint,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: project_kpis_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.project_kpis_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: project_kpis_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.project_kpis_id_seq OWNED BY public.project_kpis.id;
-
-
---
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -341,7 +324,7 @@ CREATE TABLE public.projects (
     description character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    timeline json DEFAULT '{"items":[]}'::json
+    timeline json DEFAULT '{}'::json
 );
 
 
@@ -534,13 +517,6 @@ ALTER TABLE ONLY public.podcasts ALTER COLUMN id SET DEFAULT nextval('public.pod
 
 
 --
--- Name: project_kpis id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.project_kpis ALTER COLUMN id SET DEFAULT nextval('public.project_kpis_id_seq'::regclass);
-
-
---
 -- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -630,14 +606,6 @@ ALTER TABLE ONLY public.messages
 
 ALTER TABLE ONLY public.podcasts
     ADD CONSTRAINT podcasts_pkey PRIMARY KEY (id);
-
-
---
--- Name: project_kpis project_kpis_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.project_kpis
-    ADD CONSTRAINT project_kpis_pkey PRIMARY KEY (id);
 
 
 --
@@ -758,13 +726,6 @@ CREATE UNIQUE INDEX index_podcasts_on_title ON public.podcasts USING btree (titl
 
 
 --
--- Name: index_project_kpis_on_project_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_project_kpis_on_project_id ON public.project_kpis USING btree (project_id);
-
-
---
 -- Name: index_projects_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -842,6 +803,13 @@ CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 
 
 --
+-- Name: index_users_on_fullname; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_users_on_fullname ON public.users USING gin (lower((((first_name)::text || ' '::text) || (last_name)::text)) public.gin_trgm_ops);
+
+
+--
 -- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -901,14 +869,6 @@ ALTER TABLE ONLY public.messages
 
 
 --
--- Name: project_kpis fk_rails_cea8433f09; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.project_kpis
-    ADD CONSTRAINT fk_rails_cea8433f09 FOREIGN KEY (project_id) REFERENCES public.projects(id);
-
-
---
 -- Name: mailboxer_conversation_opt_outs mb_opt_outs_on_conversations_id; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -939,7 +899,6 @@ ALTER TABLE ONLY public.mailboxer_receipts
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20180820171711'),
 ('20180822175433'),
 ('20180822175518'),
 ('20180822175743'),
@@ -951,13 +910,13 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181113001936'),
 ('20181113001937'),
 ('20181113001938'),
-('20181122002708'),
 ('20181125001017'),
 ('20181202181535'),
 ('20181202181536'),
 ('20181202181537'),
 ('20181202181538'),
 ('20181214002520'),
-('20181214011419');
+('20181214011419'),
+('20181226233942');
 
 
