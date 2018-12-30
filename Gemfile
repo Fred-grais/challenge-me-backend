@@ -57,3 +57,9 @@ gem 'httparty'
 gem 'nokogiri'
 
 gem 'hashdiff'
+
+gem 'anycable-rails', '~> 0.6.0'
+gem 'grpc', '1.16.0'
+gem 'redis', '>= 4.0'
+
+gem 'dotenv-rails', groups: [:development, :test]
