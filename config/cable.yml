@@ -2,7 +2,7 @@ development:
   adapter: any_cable
 
 test:
-  adapter: any_cable
+  adapter: async
 
 production:
   adapter: any_cable

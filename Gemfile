@@ -1,7 +1,7 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.4.4'
+ruby '2.5.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.1'
@@ -42,6 +42,9 @@ end
 group :test do
   gem 'shoulda'
   gem 'mocha'
+  gem 'timecop'
+  gem 'action-cable-testing'
+  gem 'webmock'
 end
 
 
@@ -63,3 +66,5 @@ gem 'grpc', '1.16.0'
 gem 'redis', '>= 4.0'
 
 gem 'dotenv-rails', groups: [:development, :test]
+
+gem 'rocketchat'

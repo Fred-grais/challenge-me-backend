@@ -20,8 +20,9 @@ class User < ApplicationRecord
     end
   end
 
-
   has_many :messages, foreign_key: :sender_id
+
+  after_create :create_rocket_chat_user
 
   PREVIEW_ATTRIBUTES = {
       attributes: [:id, :first_name, :last_name, :position],
@@ -38,4 +39,11 @@ class User < ApplicationRecord
       method: []
   }
 
+  def create_rocket_chat_user(handler = RocketChatInterface.new)
+    self.update(rocket_chat_user_id: handler.create_user(self).id)
+  end
+
+  def full_name
+    [self.first_name, self.last_name].compact.map(&:capitalize).join(' ')
+  end
 end

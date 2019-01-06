@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class Api::V1::Me::MessagesControllerTest < ActionDispatch::IntegrationTest
-
+  include ActionCable::TestHelper
 
   context 'create' do
 
@@ -81,9 +81,16 @@ class Api::V1::Me::MessagesControllerTest < ActionDispatch::IntegrationTest
           end
 
           should 'create a new message and return the correct response' do
-            assert_difference 'Message.count', +1 do
-              authenticate_user(@user) do |authentication_headers|
-                post api_v1_me_messages_url, headers: authentication_headers, params: @params
+            now = Time.now.utc
+
+            Timecop.freeze(now) do
+              assert_broadcast_on(ConversationChannel.compute_name(@conversation.id), newMessage: {"senderId" => @user.id, "message" => @params[:message][:message], "createdAt" => now.as_json}) do
+
+                assert_difference 'Message.count', +1 do
+                  authenticate_user(@user) do |authentication_headers|
+                    post api_v1_me_messages_url, headers: authentication_headers, params: @params
+                  end
+                end
               end
             end
 

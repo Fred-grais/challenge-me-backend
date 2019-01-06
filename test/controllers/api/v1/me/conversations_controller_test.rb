@@ -165,7 +165,7 @@ class Api::V1::Me::MessagesControllerTest < ActionDispatch::IntegrationTest
               "displayedMessages"=> conversation.displayed_messages.each(&:convert_keys_to_camelcase).as_json
             }
         }
-        assert_equal(HashDiff.diff(expected, JSON.parse(@response.body)), [])
+        assert_equal([], HashDiff.diff(expected, JSON.parse(@response.body)))
       end
 
       should 'should not create a new conversation' do

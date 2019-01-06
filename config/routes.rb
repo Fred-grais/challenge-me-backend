@@ -26,6 +26,8 @@ Rails.application.routes.draw do
       namespace :me do
         resources :projects, only: [:index, :show, :create, :edit, :update, :destroy]
 
+        resources :chat_sessions, only: [:create]
+
         resources :messages, only: [:create]
 
         resources :conversations, only: [:index, :show, :create]

@@ -39,4 +39,21 @@ class UserTest < ActiveSupport::TestCase
 
     assert_same_elements([conv, conv2], user.conversations)
   end
+
+  test 'should create a user on rocket chat after creation' do
+    user = FactoryBot.build(:user)
+    user.expects(:create_rocket_chat_user)
+    user.save
+  end
+
+  test '#create_rocket_chat_user should call the correct method and update the user correctly' do
+    user = FactoryBot.build(:user)
+    User.skip_callback(:create, :after, :create_rocket_chat_user, raise: false)
+    mock = OpenStruct.new(create_user: -> () {})
+    RocketChatInterface.expects(:new).returns(mock)
+    mock.expects(:create_user).with(user).returns(OpenStruct.new(id: 21))
+    user.create_rocket_chat_user
+
+    assert_equal('21', user.rocket_chat_user_id)
+  end
 end

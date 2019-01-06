@@ -5,10 +5,6 @@ class ConversationChannel < ApplicationCable::Channel
     stream_from ConversationChannel.compute_name(params[:conversation_id])
   end
 
-  def receive(data)
-    ActionCable.server.broadcast(ConversationChannel.compute_name(params[:conversation_id]), data)
-  end
-
   private
 
   def self.compute_name(conversation_id)
