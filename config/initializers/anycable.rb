@@ -1,0 +1,1 @@
+AnyCable.broadcast_adapter = :redis, { url: ENV['REDIS_URL'] }

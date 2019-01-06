@@ -444,7 +444,8 @@ CREATE TABLE public.users (
     last_sign_in_ip inet,
     provider character varying DEFAULT 'email'::character varying NOT NULL,
     uid character varying DEFAULT ''::character varying NOT NULL,
-    tokens text
+    tokens text,
+    rocket_chat_user_id character varying
 );
 
 
@@ -917,6 +918,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181202181538'),
 ('20181214002520'),
 ('20181214011419'),
-('20181226233942');
+('20181226233942'),
+('20190101173712');
 
 

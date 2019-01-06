@@ -7,7 +7,9 @@ module Api
           message = current_user.messages.build(message_params)
 
           result = if message.save
-            {success: true, message: message.as_json(for_front: true)}
+             message_json = message.as_json(for_front: true)
+             ActionCable.server.broadcast(ConversationChannel.compute_name(message.conversation_id), {newMessage: message_json})
+            {success: true, message: message_json}
           else
             {success: false, errors: message.errors.full_messages}
           end

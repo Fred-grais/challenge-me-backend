@@ -9,11 +9,15 @@ end
 class Hash
 
   def convert_keys_to_camelcase
+    pristine = self.dup
+
     self.transform_keys! do |k|
-      if self[k].is_a?(Hash)
-        self[k].convert_keys_to_camelcase
-      elsif self[k].is_a?(Array)
-        self[k].each do |item|
+      current_val = pristine[k]
+
+      if current_val.is_a?(Hash)
+        current_val.convert_keys_to_camelcase
+      elsif current_val.is_a?(Array)
+        current_val.each do |item|
           if item.is_a?(Hash)
             item.convert_keys_to_camelcase
           end
@@ -25,11 +29,15 @@ class Hash
   end
 
   def convert_keys_to_underscore
+    pristine = self.dup
+
     self.transform_keys! do |k|
-      if self[k].is_a?(Hash)
-        self[k].convert_keys_to_underscore
-      elsif self[k].is_a?(Array)
-        self[k].each do |item|
+      current_val = pristine[k]
+
+      if current_val.is_a?(Hash)
+        current_val.convert_keys_to_underscore
+      elsif current_val.is_a?(Array)
+        current_val.each do |item|
           if item.is_a?(Hash)
             item.convert_keys_to_underscore
           end

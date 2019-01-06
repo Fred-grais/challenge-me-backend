@@ -43,4 +43,9 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+  #
+
+  ENV['ROCKET_CHAT_SERVER_URL'] = 'http://rocket_chat_test'
+  ENV['ROCKET_CHAT_ADMIN_USERNAME'] = 'rc_username'
+  ENV['ROCKET_CHAT_ADMIN_PASSWORD'] = 'rc_password'
 end
