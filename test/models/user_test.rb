@@ -41,9 +41,9 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'should create a user on rocket chat after creation' do
-    user = FactoryBot.build(:user)
-    user.expects(:create_rocket_chat_user)
-    user.save
+    u = User.new(email: 'test@email.com', password: '12345678')
+    u.expects(:create_rocket_chat_user)
+    u.save
   end
 
   test '#create_rocket_chat_user should call the correct method and update the user correctly' do

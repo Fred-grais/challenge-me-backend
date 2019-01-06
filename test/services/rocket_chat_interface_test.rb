@@ -32,19 +32,22 @@ class RocketChatInterfaceTest < ActiveSupport::TestCase
 
     user = FactoryBot.create(:user)
     SecureRandom.expects(:hex).with(16).returns('123')
+    rocket_chat_interface = RocketChatInterface.new
+
     stub_request(:post, "#{ENV['ROCKET_CHAT_SERVER_URL']}/api/v1/users.create").
         with(
-            body: "{\"username\":\"first_name1_last_name1\",\"email\":\"1@example.com\",\"name\":\"First_name1 Last_name1\",\"password\":\"123\",\"active\":true,\"sendWelcomeEmail\":false,\"joinDefaultChannels\":true,\"customFields\":{\"app_user_id\":#{user.id}}}",
+            body: "{\"username\":\"#{rocket_chat_interface.send(:generate_username, user.full_name)}\",\"email\":\"#{user.email}\",\"name\":\"#{user.full_name}\",\"password\":\"123\",\"active\":true,\"sendWelcomeEmail\":false,\"joinDefaultChannels\":true,\"customFields\":{\"app_user_id\":#{user.id}}}",
             headers: {
                 'Accept'=>'*/*',
                 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
                 'Content-Type'=>'application/json',
                 'User-Agent'=>'Ruby'
-            }).
+            }
+        ).
         to_return(status: 200, body: {success: true, user: {_id: 123}}.to_json, headers: {})
 
 
-    result =  RocketChatInterface.new.create_user(user)
+    result =  rocket_chat_interface.create_user(user)
     assert_equal(123, result.id)
   end
 
