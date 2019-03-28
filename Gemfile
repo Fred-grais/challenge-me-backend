@@ -43,6 +43,7 @@ end
 group :development do
   gem 'better_errors'
   gem 'rubocop', '~> 0.66.0', require: false
+  gem "rubocop-rails_config"
 end
 
 group :test do

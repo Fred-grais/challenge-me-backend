@@ -1,7 +1,3 @@
-inherit_from: .rubocop_todo.yml
-
-AllCops:
-  EnabledByDefault: true
-  AutoCorrect: true
-Rails:
-  Enabled: true
+inherit_gem:
+  rubocop-rails_config:
+    - config/rails.yml
