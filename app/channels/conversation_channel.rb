@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ConversationChannel < ApplicationCable::Channel
   # Called when the consumer has successfully
   # become a subscriber to this channel.
@@ -7,7 +9,7 @@ class ConversationChannel < ApplicationCable::Channel
 
   private
 
-  def self.compute_name(conversation_id)
-    "conversation_#{conversation_id}"
-  end
+    def self.compute_name(conversation_id)
+      "conversation_#{conversation_id}"
+    end
 end

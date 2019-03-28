@@ -1,6 +1,7 @@
-module AuthenticationHelper
+# frozen_string_literal: true
 
-  def authenticate_user user
+module AuthenticationHelper
+  def authenticate_user(user)
     authentication_headers = user.create_new_auth_token
     sign_in user
 

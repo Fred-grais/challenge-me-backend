@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     module Me
       module Projects
         class LogoUploadController < Api::V1::MeController
-
           before_action :set_project_and_check_user, only: [:create]
 
           def create

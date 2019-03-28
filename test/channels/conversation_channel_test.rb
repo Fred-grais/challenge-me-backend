@@ -1,7 +1,8 @@
-require 'test_helper'
+# frozen_string_literal: true
+
+require "test_helper"
 
 class ConversationChannelTest < ActionCable::Channel::TestCase
-
   def test_subscribed_with_room_number
     # Simulate a subscription creation
     subscribe conversationId: 1

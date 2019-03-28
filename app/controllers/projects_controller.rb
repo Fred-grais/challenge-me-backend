@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProjectsController < ApplicationController
   include DefaultErrorsHandling
 
@@ -15,12 +17,11 @@ class ProjectsController < ApplicationController
 
   private
 
-  def set_project
-    @project = Project.includes(:user).find(params[:id])
+    def set_project
+      @project = Project.includes(:user).find(params[:id])
 
-    if @project.blank?
-      render_resource_not_found
-    end
-
-  end
+      if @project.blank?
+        render_resource_not_found
+      end
+      end
 end

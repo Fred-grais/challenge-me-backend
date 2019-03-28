@@ -47,23 +47,23 @@ class Authentication::RegistrationsController < DeviseTokenAuth::RegistrationsCo
 
   protected
 
-  #If you have extra params to permit, append them to the sanitizer.
-  def configure_sign_up_params
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :password])
-  end
-
-  #If you have extra params to permit, append them to the sanitizer.
-  def configure_account_update_params
-    params.keys.each do |k|
-      underscored = k.underscore
-      if underscored != k
-        params[k.underscore] = params[k]
-        params.delete(k)
-      end
+    # If you have extra params to permit, append them to the sanitizer.
+    def configure_sign_up_params
+      devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :password])
     end
 
-    devise_parameter_sanitizer.permit(:account_update, keys: [:first_name, :avatar, :last_name, :position, :twitter_id, timeline: [items: [:internal_id, :title, :description, :date, :image_url]]])
-  end
+    # If you have extra params to permit, append them to the sanitizer.
+    def configure_account_update_params
+      params.keys.each do |k|
+        underscored = k.underscore
+        if underscored != k
+          params[k.underscore] = params[k]
+          params.delete(k)
+        end
+      end
+
+      devise_parameter_sanitizer.permit(:account_update, keys: [:first_name, :avatar, :last_name, :position, :twitter_id, timeline: [items: [:internal_id, :title, :description, :date, :image_url]]])
+    end
 
   # The path used after sign up.
   # def after_sign_up_path_for(resource)

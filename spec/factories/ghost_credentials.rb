@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :ghost_credentials do
-    username {"MyString"}
-    password {"MyString"}
+    username { "MyString" }
+    password { "MyString" }
     user
 
     after(:build) { |ghost_credentials| GhostCredentials.skip_callback(:create, :after, :create_user_in_ghost_db) }

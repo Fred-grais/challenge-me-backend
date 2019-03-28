@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class UploadsVariants
   class << self
     def jpeg?(blob)
-      blob.content_type.include? 'jpeg'
+      blob.content_type.include? "jpeg"
     end
 
     def optimize
@@ -13,10 +15,10 @@ class UploadsVariants
     def optimize_jpeg
       {
         strip: true,
-        'sampling-factor': '4:2:0',
-        quality: '85',
-        interlace: 'JPEG',
-        colorspace: 'sRGB'
+        'sampling-factor': "4:2:0",
+        quality: "85",
+        interlace: "JPEG",
+        colorspace: "sRGB"
       }
     end
 

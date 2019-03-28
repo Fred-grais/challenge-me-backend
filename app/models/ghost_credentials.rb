@@ -1,9 +1,10 @@
-class GhostCredentials < ApplicationRecord
+# frozen_string_literal: true
 
+class GhostCredentials < ApplicationRecord
   attr_reader :interface
 
   belongs_to :user
-  has_one :blog_user, class_name: 'Blog::User', foreign_key: :id
+  has_one :blog_user, class_name: "Blog::User", foreign_key: :id
 
   after_initialize :set_ghost_interface
   after_create :create_user_in_ghost_db
@@ -37,7 +38,7 @@ class GhostCredentials < ApplicationRecord
         id: self.id
       )
 
-      new_roles_user.role = Blog::Role.find_by(name: 'Contributor')
+      new_roles_user.role = Blog::Role.find_by(name: "Contributor")
 
       new_user.save
     end

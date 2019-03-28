@@ -1,5 +1,6 @@
-module Blog
+# frozen_string_literal: true
 
+module Blog
   class Base < ActiveRecord::Base
     self.abstract_class = true
     establish_connection GHOST_DATABASE

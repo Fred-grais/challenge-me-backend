@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UsersController < ApplicationController
   include DefaultErrorsHandling
 
@@ -15,11 +17,11 @@ class UsersController < ApplicationController
 
   private
 
-  def set_user
-    @user = User.find(params[:id])
+    def set_user
+      @user = User.find(params[:id])
 
-    unless @user
-      render_resource_not_found
+      unless @user
+        render_resource_not_found
+      end
     end
-  end
 end

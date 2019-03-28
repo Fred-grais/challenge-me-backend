@@ -1,5 +1,6 @@
-class Project < ApplicationRecord
+# frozen_string_literal: true
 
+class Project < ApplicationRecord
   include FrontDataGeneration
 
   acts_as_taggable_on :activity_sectors, :challenges_needed
@@ -67,20 +68,20 @@ class Project < ApplicationRecord
 
   private
 
-  def create_rocket_chat_group
-    unless self.rocket_chat_details.present?
-      handler_instance = RocketChatInterface.new
-      new_rocket_chat_group = handler_instance.create_group(self.name)
+    def create_rocket_chat_group
+      unless self.rocket_chat_details.present?
+        handler_instance = RocketChatInterface.new
+        new_rocket_chat_group = handler_instance.create_group(self.name)
 
-      begin
-        handler_instance.add_moderator_to_group(new_rocket_chat_group.id, self.user.rocket_chat_details.rocketchat_id)
-      rescue => e
-        unless e.message.include?('error-user-already-owner')
-          raise e
+        begin
+          handler_instance.add_moderator_to_group(new_rocket_chat_group.id, self.user.rocket_chat_details.rocketchat_id)
+        rescue => e
+          unless e.message.include?("error-user-already-owner")
+            raise e
+          end
         end
-      end
 
-      self.create_rocket_chat_details(rocketchat_id: new_rocket_chat_group.id, name: new_rocket_chat_group.name)
+        self.create_rocket_chat_details(rocketchat_id: new_rocket_chat_group.id, name: new_rocket_chat_group.name)
+      end
     end
-  end
 end

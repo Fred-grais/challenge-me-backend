@@ -1,17 +1,19 @@
-source 'http://rubygems.org'
+# frozen_string_literal: true
+
+source "http://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.3'
+ruby "2.5.3"
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.1'
-gem 'rack', '>= 2.0.6'
+gem "rails", "~> 5.2.1"
+gem "rack", ">= 2.0.6"
 # Use postgresql as the database for Active Record
-gem 'pg', '>= 0.18', '< 2.0'
+gem "pg", ">= 0.18", "< 2.0"
 
-gem 'mysql2'
+gem "mysql2"
 # Use Puma as the app server
-gem 'puma', '~> 3.11'
+gem "puma", "~> 3.11"
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
@@ -20,67 +22,67 @@ gem 'puma', '~> 3.11'
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use ActiveStorage variant
-gem 'mini_magick', '~> 4.8'
+gem "mini_magick", "~> 4.8"
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
 # Reduces boot times through caching; required in config/boot.rb
-gem 'bootsnap', '>= 1.1.0', require: false
+gem "bootsnap", ">= 1.1.0", require: false
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-gem 'rack-cors'
+gem "rack-cors"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'factory_bot_rails'
-  gem 'rspec-rails', '~> 3.8'
-  gem 'shoulda'
-  gem 'timecop'
+  gem "byebug", platforms: [:mri, :mingw, :x64_mingw]
+  gem "factory_bot_rails"
+  gem "rspec-rails", "~> 3.8"
+  gem "shoulda"
+  gem "timecop"
 end
 
 group :development do
-  gem 'better_errors'
-  gem 'rubocop', '~> 0.66.0', require: false
+  gem "better_errors"
+  gem "rubocop", "~> 0.66.0", require: false
   gem "rubocop-rails_config"
 end
 
 group :test do
-  gem 'shoulda-callback-matchers', '~> 1.1.1'
-  gem 'mocha'
-  gem 'action-cable-testing'
-  gem 'webmock'
-  gem 'simplecov', require: false
+  gem "shoulda-callback-matchers", "~> 1.1.1"
+  gem "mocha"
+  gem "action-cable-testing"
+  gem "webmock"
+  gem "simplecov", require: false
 end
 
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem "tzinfo-data", platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Users Login/Signup
-gem 'devise_token_auth'
+gem "devise_token_auth"
 
-gem 'acts-as-taggable-on', '~> 6.0'
+gem "acts-as-taggable-on", "~> 6.0"
 
-gem 'httparty'
-gem 'nokogiri'
+gem "httparty"
+gem "nokogiri"
 
-gem 'hashdiff'
+gem "hashdiff"
 
-gem 'anycable-rails', '~> 0.6.0'
-gem 'grpc', '1.16.0'
-gem 'redis', '>= 4.0'
+gem "anycable-rails", "~> 0.6.0"
+gem "grpc", "1.16.0"
+gem "redis", ">= 4.0"
 
-gem 'dotenv-rails', groups: [:development, :test]
+gem "dotenv-rails", groups: [:development, :test]
 
-gem 'rocketchat'
+gem "rocketchat"
 
-gem 'omniauth-linkedin-oauth2'
+gem "omniauth-linkedin-oauth2"
 
-gem 'aasm'
+gem "aasm"
 
 # Upload resizing
-gem 'image_processing', '~> 1.2'
+gem "image_processing", "~> 1.2"
 
 gem "aws-sdk-s3", require: false

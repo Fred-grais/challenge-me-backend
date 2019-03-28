@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   include AASM
 
@@ -29,7 +31,7 @@ class User < ApplicationRecord
   #
   # has_many :messages, foreign_key: :sender_id
 
-  #after_create :create_rocket_chat_user
+  # after_create :create_rocket_chat_user
 
   PREVIEW_ATTRIBUTES = {
     attributes: [:id, :first_name, :last_name, :position],
@@ -46,22 +48,21 @@ class User < ApplicationRecord
     method: []
   }
 
-  aasm :column => 'status' do
-
+  aasm column: "status" do
     state :pending_activation, initial: true
     state :active
     state :inactive
 
     event :manage_status do
-      transitions from: :pending_activation, to: :active, :guard => :user_details_present?, after: :after_activate
-      transitions from: :active, to: :inactive, :guard => :missing_user_details?
-      transitions from: :inactive, to: :active, :guard => :user_details_present?
+      transitions from: :pending_activation, to: :active, guard: :user_details_present?, after: :after_activate
+      transitions from: :active, to: :inactive, guard: :missing_user_details?
+      transitions from: :inactive, to: :active, guard: :user_details_present?
 
       transitions from: :active, to: :active
     end
 
     event :activate, after: :after_activate do
-      transitions from: :pending_activation, to: :active, :guard => :user_details_present?
+      transitions from: :pending_activation, to: :active, guard: :user_details_present?
     end
 
     event :deactivate do
@@ -69,10 +70,10 @@ class User < ApplicationRecord
     end
 
     event :reactivate do
-      transitions from: :inactive, to: :active, :guard => :user_details_present?
+      transitions from: :inactive, to: :active, guard: :user_details_present?
     end
   end
-  
+
   def avatar_url
     if self.avatar.attached?
       blob = self.avatar.blob
@@ -86,7 +87,7 @@ class User < ApplicationRecord
   end
 
   def full_name
-    [self.first_name, self.last_name].compact.map(&:capitalize).join(' ')
+    [self.first_name, self.last_name].compact.map(&:capitalize).join(" ")
   end
 
   def rocket_chat_profile
@@ -105,7 +106,7 @@ class User < ApplicationRecord
     end
 
     def user_details_present?
-      %w{first_name last_name position}.all? {|attr| self.send(attr).present?}
+      %w{first_name last_name position}.all? { |attr| self.send(attr).present? }
     end
 
     def create_rocket_chat_user

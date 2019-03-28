@@ -1,8 +1,10 @@
-require 'rails_helper'
+# frozen_string_literal: true
+
+require "rails_helper"
 
 RSpec.describe Blog::RolesUser, type: :model do
-    describe 'Associations' do
-      it {should belong_to(:user)}
-      it {should belong_to(:role).class_name('Blog::Role')}
-    end
+  describe "Associations" do
+    it { should belong_to(:user) }
+    it { should belong_to(:role).class_name("Blog::Role") }
+  end
 end

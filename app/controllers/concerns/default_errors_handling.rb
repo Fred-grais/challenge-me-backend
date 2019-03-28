@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module DefaultErrorsHandling
   extend ActiveSupport::Concern
 
@@ -13,7 +15,7 @@ module DefaultErrorsHandling
   def render_resource_not_found
     render json: {
         success: false,
-        errors: ['The resource you are trying ro access was not found on the server']
+        errors: ["The resource you are trying ro access was not found on the server"]
     }, status: :not_found
 
     false

@@ -1,26 +1,24 @@
-require 'test_helper'
+# frozen_string_literal: true
+
+require "test_helper"
 
 class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
-
-  context 'index' do
-
-    context 'Not Authenticated' do
-
-      should 'render an unauthorized error' do
+  context "index" do
+    context "Not Authenticated" do
+      should "render an unauthorized error" do
         get api_v1_me_projects_url
 
         assert_response :unauthorized
-        assert_equal({"errors"=>["You need to sign in or sign up before continuing."]}, JSON.parse(@response.body))
+        assert_equal({ "errors" => ["You need to sign in or sign up before continuing."] }, JSON.parse(@response.body))
       end
-
     end
 
-    context 'Authenticated' do
+    context "Authenticated" do
       setup do
         @user = users(:one)
       end
 
-      should 'return the currently logged in user projects' do
+      should "return the currently logged in user projects" do
         authenticate_user(@user) do |authentication_headers|
           get api_v1_me_projects_url, headers: authentication_headers
         end
@@ -29,15 +27,15 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
         projects = @user.projects
         expected = [
             {
-                "id"=>projects[0].id,
-                "name"=>projects[0].name,
-                "description"=>projects[0].description,
-                "ownerPreview"=>
+                "id" => projects[0].id,
+                "name" => projects[0].name,
+                "description" => projects[0].description,
+                "ownerPreview" =>
                     {
-                        "id"=>@user.id,
-                        "position"=>@user.position,
-                        "firstName"=>@user.first_name,
-                        "lastName"=>@user.last_name,
+                        "id" => @user.id,
+                        "position" => @user.position,
+                        "firstName" => @user.first_name,
+                        "lastName" => @user.last_name,
                     }
             }
         ]
@@ -46,91 +44,82 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  context 'show' do
+  context "show" do
     setup do
       @user = users(:one)
-      @project = FactoryBot.create(:project, challenges_needed_list: ['challenge1', 'challenge2'], activity_sector_list: ['sector1', 'sector2'], user: @user)
+      @project = FactoryBot.create(:project, challenges_needed_list: ["challenge1", "challenge2"], activity_sector_list: ["sector1", "sector2"], user: @user)
     end
 
-    context 'Not Authenticated' do
-
-      should 'render an unauthorized error' do
+    context "Not Authenticated" do
+      should "render an unauthorized error" do
         get api_v1_me_project_url(@project)
 
         assert_response :unauthorized
-        assert_equal({"errors"=>["You need to sign in or sign up before continuing."]}, JSON.parse(@response.body))
+        assert_equal({ "errors" => ["You need to sign in or sign up before continuing."] }, JSON.parse(@response.body))
       end
-
     end
 
-    context 'Authenticated' do
-
-      should 'returns the correct response' do
+    context "Authenticated" do
+      should "returns the correct response" do
         authenticate_user(@user) do |authentication_headers|
           get api_v1_me_project_url(@project), headers: authentication_headers
         end
 
         assert_response :success
         expected = {
-          "id"=>@project.id,
-          "name"=>@project.name,
-          "description"=>@project.description,
-          "activitySectorList"=>["sector2", "sector1"],
-          "challengesNeededList"=>["challenge2", "challenge1"],
+          "id" => @project.id,
+          "name" => @project.name,
+          "description" => @project.description,
+          "activitySectorList" => ["sector2", "sector1"],
+          "challengesNeededList" => ["challenge2", "challenge1"],
           "timeline" => {
             "items" => [
               {
-                "title"=>"Title",
-                "description"=>"Description",
-                "date"=>"10/10/2018",
-                "imageUrl"=>"imageUrl"
+                "title" => "Title",
+                "description" => "Description",
+                "date" => "10/10/2018",
+                "imageUrl" => "imageUrl"
               }
             ]
           },
-          "ownerFull"=>{
-            "id"=>@user.id,
-            "position"=>@user.position,
-            "email"=>@user.email,
-            "firstName"=>@user.first_name,
-            "lastName"=>@user.last_name,
+          "ownerFull" => {
+            "id" => @user.id,
+            "position" => @user.position,
+            "email" => @user.email,
+            "firstName" => @user.first_name,
+            "lastName" => @user.last_name,
           }
         }
         assert_equal(expected, JSON.parse(@response.body))
-
       end
     end
-
   end
 
-  context 'create' do
-
+  context "create" do
     setup do
       @user = users(:one)
       @params = {
         project: {
-          name: 'Name',
-          description: 'Description',
-          challenges_needed_list: ['challenge1', 'challenge2'],
-          activity_sector_list: ['sector1', 'sector2']
+          name: "Name",
+          description: "Description",
+          challenges_needed_list: ["challenge1", "challenge2"],
+          activity_sector_list: ["sector1", "sector2"]
         }
       }
     end
 
-    context 'Not Authenticated' do
-
-      should 'render an unauthorized error' do
+    context "Not Authenticated" do
+      should "render an unauthorized error" do
         post api_v1_me_projects_url, params: @params
 
         assert_response :unauthorized
-        assert_equal({"errors"=>["You need to sign in or sign up before continuing."]}, JSON.parse(@response.body))
+        assert_equal({ "errors" => ["You need to sign in or sign up before continuing."] }, JSON.parse(@response.body))
       end
-
     end
 
-    context 'Authenticated' do
-
-      should 'create a new project and return the correct response' do
-        assert_difference('Project.count', 1) do
+    context "Authenticated" do
+      should "create a new project and return the correct response" do
+        assert_difference("Project.count", 1) do
           authenticate_user(@user) do |authentication_headers|
             post api_v1_me_projects_url, params: @params, headers: authentication_headers
           end
@@ -139,88 +128,81 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
         assert_response :created
         project = Project.last
         expected = {
-            "id"=>project.id,
-            "name"=>project.name,
-            "description"=>project.description,
-            "ownerPreview"=>{
-                "id"=>@user.id,
-                "firstName"=>@user.first_name,
-                "lastName"=>@user.last_name,
-                "position"=>@user.position,
+            "id" => project.id,
+            "name" => project.name,
+            "description" => project.description,
+            "ownerPreview" => {
+                "id" => @user.id,
+                "firstName" => @user.first_name,
+                "lastName" => @user.last_name,
+                "position" => @user.position,
             }
         }
         assert_equal(expected, JSON.parse(@response.body))
       end
 
 
-      context 'wrong params' do
+      context "wrong params" do
         setup do
           @wrong_params = {
               project: {
                   name: @user.projects.last.name,
-                  description: 'Description'
+                  description: "Description"
               }
           }
         end
 
-        should 'not create a new project and return the correct error' do
-
-          assert_difference('Project.count', 0) do
+        should "not create a new project and return the correct error" do
+          assert_difference("Project.count", 0) do
             authenticate_user(@user) do |authentication_headers|
               post api_v1_me_projects_url, params: @wrong_params, headers: authentication_headers
             end
           end
 
           assert_response :unprocessable_entity
-          expected =  ["Name has already been taken"]
+          expected = ["Name has already been taken"]
           assert_equal(expected, JSON.parse(@response.body))
         end
       end
     end
-
   end
 
-  context 'update' do
+  context "update" do
     setup do
       @user = users(:one)
       @project = FactoryBot.create(:project, user: @user)
 
       @params = {
         project: {
-          name: 'Updated Name',
-          description: 'Updated Description',
-          challenges_needed_list: ['challenge1', 'challenge2'],
-          activity_sector_list: ['sector1', 'sector2'],
+          name: "Updated Name",
+          description: "Updated Description",
+          challenges_needed_list: ["challenge1", "challenge2"],
+          activity_sector_list: ["sector1", "sector2"],
           timeline: {
             items: [
               {
-                title: 'title1',
-                description: 'description1',
-                date: '10/10/2018',
-                image_url: 'imageUrl'
+                title: "title1",
+                description: "description1",
+                date: "10/10/2018",
+                image_url: "imageUrl"
               }
             ]
           }
         }
       }
-
     end
 
-    context 'Not Authenticated' do
-
-      should 'render an unauthorized error' do
+    context "Not Authenticated" do
+      should "render an unauthorized error" do
         put api_v1_me_project_url(@project), params: @params
 
         assert_response :unauthorized
-        assert_equal({"errors"=>["You need to sign in or sign up before continuing."]}, JSON.parse(@response.body))
+        assert_equal({ "errors" => ["You need to sign in or sign up before continuing."] }, JSON.parse(@response.body))
       end
-
     end
 
-    context 'Authenticated' do
-
-      should 'update the correct project and return the correct response' do
-
+    context "Authenticated" do
+      should "update the correct project and return the correct response" do
         authenticate_user(@user) do |authentication_headers|
           put api_v1_me_project_url(@project), params: @params, headers: authentication_headers
         end
@@ -228,89 +210,81 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
         assert_response :success
         @project.reload
         expected = {
-            "id"=>@project.id,
-            "name"=>@project.name,
-            "description"=>@project.description,
-            "activitySectorList" => ['sector1', 'sector2'],
-            "challengesNeededList" => ['challenge1', 'challenge2'],
+            "id" => @project.id,
+            "name" => @project.name,
+            "description" => @project.description,
+            "activitySectorList" => ["sector1", "sector2"],
+            "challengesNeededList" => ["challenge1", "challenge2"],
             "timeline" => {
               "items" => [
                 {
-                  "title" => 'title1',
-                  "description" => 'description1',
-                  "date" => '10/10/2018',
-                  "imageUrl" => 'imageUrl'
+                  "title" => "title1",
+                  "description" => "description1",
+                  "date" => "10/10/2018",
+                  "imageUrl" => "imageUrl"
                 }
               ]
             },
-            "ownerFull"=>{
-                "id"=>@user.id,
-                "position"=>@user.position,
-                "email"=>@user.email,
-                "firstName"=>@user.first_name,
-                "lastName"=>@user.last_name,
+            "ownerFull" => {
+                "id" => @user.id,
+                "position" => @user.position,
+                "email" => @user.email,
+                "firstName" => @user.first_name,
+                "lastName" => @user.last_name,
             }
         }
 
         assert_equal(expected, JSON.parse(@response.body))
-
       end
 
-      context 'wrong_params' do
+      context "wrong_params" do
         setup do
           @existing_project = FactoryBot.create(:project, user: @user)
           @wrong_params = {
               project: {
                   name: @existing_project.name,
-                  description: 'Description'
+                  description: "Description"
               }
           }
         end
 
-        should 'not update the project and return the correct error' do
-
+        should "not update the project and return the correct error" do
           authenticate_user(@user) do |authentication_headers|
             put api_v1_me_project_url(@project), params: @wrong_params, headers: authentication_headers
           end
 
           assert_response :unprocessable_entity
-          expected =  ["Name has already been taken"]
+          expected = ["Name has already been taken"]
           assert_equal(expected, JSON.parse(@response.body))
         end
-
       end
     end
-
   end
 
-  context 'destroy' do
+  context "destroy" do
     setup do
       @user = users(:one)
       @project = FactoryBot.create(:project, user: @user)
     end
 
-    context 'Not Authenticated' do
-
-      should 'render an unauthorized error' do
+    context "Not Authenticated" do
+      should "render an unauthorized error" do
         delete api_v1_me_project_url(@project)
 
         assert_response :unauthorized
-        assert_equal({"errors"=>["You need to sign in or sign up before continuing."]}, JSON.parse(@response.body))
+        assert_equal({ "errors" => ["You need to sign in or sign up before continuing."] }, JSON.parse(@response.body))
       end
-
     end
 
-    context 'Authenticated' do
-
-      should 'destroy the project and return the correct response' do
-        assert_difference('Project.count', -1) do
+    context "Authenticated" do
+      should "destroy the project and return the correct response" do
+        assert_difference("Project.count", -1) do
           authenticate_user(@user) do |authentication_headers|
             delete api_v1_me_project_url(@project), headers: authentication_headers
           end
         end
 
         assert_response :success
-
       end
     end
   end

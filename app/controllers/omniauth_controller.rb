@@ -1,5 +1,6 @@
-class OmniauthController < ApplicationController
+# frozen_string_literal: true
 
+class OmniauthController < ApplicationController
   def create
     xx
     render json: true
@@ -7,6 +8,6 @@ class OmniauthController < ApplicationController
 
   def failure
     xx
-    puts request.env['omniauth.auth']
+    puts request.env["omniauth.auth"]
   end
 end
