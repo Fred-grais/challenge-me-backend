@@ -1,0 +1,6 @@
+version: 1
+task_definition:
+  services:
+    rocketchat:
+      cpu_shares: 500
+      mem_limit: 900000000

@@ -7,7 +7,7 @@ module Api
         before_action :set_project_and_check_user, only: [:show, :update, :destroy]
 
         def index
-          render json: current_user.projects.as_json(preview: true, for_front: true)
+          render json: current_user.projects.with_attached_logo.as_json(preview: true, for_front: true)
         end
 
         # GET /projects/1
@@ -52,7 +52,7 @@ module Api
 
           # Only allow a trusted parameter "white list" through.
           def project_params
-            params.require(:project).permit(:name, :description, activity_sector_list: [], challenges_needed_list: [], timeline: [items: [:title, :description, :date, :imageUrl]])
+            params.require(:project).permit(:name, :description, activity_sector_list: [], challenges_needed_list: [], timeline: [items: [:title, :description, :date, :image_url]])
           end
       end
     end

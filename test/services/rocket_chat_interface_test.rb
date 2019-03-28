@@ -46,8 +46,8 @@ class RocketChatInterfaceTest < ActiveSupport::TestCase
         ).
         to_return(status: 200, body: {success: true, user: {_id: 123}}.to_json, headers: {})
 
-
-    result =  rocket_chat_interface.create_user(user)
+        
+    result =   rocket_chat_interface.create_user(user)
     assert_equal(123, result.id)
   end
 

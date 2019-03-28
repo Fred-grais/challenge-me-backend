@@ -197,7 +197,7 @@ class Api::V1::Me::ProjectsControllerTest < ActionDispatch::IntegrationTest
                 title: 'title1',
                 description: 'description1',
                 date: '10/10/2018',
-                imageUrl: 'imageUrl'
+                image_url: 'imageUrl'
               }
             ]
           }

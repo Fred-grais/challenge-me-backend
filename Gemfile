@@ -8,6 +8,8 @@ gem 'rails', '~> 5.2.1'
 gem 'rack', '>= 2.0.6'
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
+
+gem 'mysql2'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -18,7 +20,7 @@ gem 'puma', '~> 3.11'
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use ActiveStorage variant
-# gem 'mini_magick', '~> 4.8'
+gem 'mini_magick', '~> 4.8'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -33,18 +35,22 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'factory_bot_rails'
+  gem 'rspec-rails', '~> 3.8'
+  gem 'shoulda'
+  gem 'timecop'
 end
 
 group :development do
   gem 'better_errors'
+  gem 'rubocop', '~> 0.66.0', require: false
 end
 
 group :test do
-  gem 'shoulda'
+  gem 'shoulda-callback-matchers', '~> 1.1.1'
   gem 'mocha'
-  gem 'timecop'
   gem 'action-cable-testing'
   gem 'webmock'
+  gem 'simplecov', require: false
 end
 
 
@@ -68,3 +74,12 @@ gem 'redis', '>= 4.0'
 gem 'dotenv-rails', groups: [:development, :test]
 
 gem 'rocketchat'
+
+gem 'omniauth-linkedin-oauth2'
+
+gem 'aasm'
+
+# Upload resizing
+gem 'image_processing', '~> 1.2'
+
+gem "aws-sdk-s3", require: false

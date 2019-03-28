@@ -1,0 +1,18 @@
+version: 1
+task_definition:
+  docker_volumes:
+    - name: ghost_db
+      scope: shared
+      autoprovision: true
+      driver: local
+    - name: ghost
+      scope: shared
+      autoprovision: true
+      driver: local
+  services:
+    ghost_db:
+      cpu_shares: 100
+      mem_limit: 1000000000
+    ghost:
+      cpu_shares: 100
+      mem_limit: 1000000000

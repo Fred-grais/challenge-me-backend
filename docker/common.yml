@@ -1,0 +1,10 @@
+backend:
+  image: 'syland/challenge_me:backend'
+  env_file:
+    - ../.env
+  environment:
+    - REDIS_URL=redis://challenge-me-staging.ckpmzg.ng.0001.euw3.cache.amazonaws.com:6379/0
+    - ANYCABLE_WEBSOCKET_SERVER_URL=ws://anycable_go:8080/cable
+    - DB_HOST=challenge-me-staging.cnpgvl6hselb.eu-west-3.rds.amazonaws.com
+    - DB_USERNAME=challenge_me_staging
+    - DB_PASSWORD=futur123!

@@ -7,7 +7,7 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'localhost:8080', '192.168.1.21:8080', 'challenge-me.now.sh'
+    origins 'localhost:8080', '192.168.1.21:8080', 'challenge-me.now.sh', 'challenge-me.dev.com:8080'
 
 
     resource '/projects',
@@ -28,8 +28,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
 
     resource '/podcasts',
              headers: :any,
-             methods: [:get, :options]
-
+             methods: [:get, :options],
+             credentials: true
 
     resource '/api/*/tags',
              headers: :any,
@@ -56,10 +56,26 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
              expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
              methods: [:get, :post, :options]
 
+    resource '/api/*/me/avatars_uploads',
+             headers: :any,
+             expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+             methods: [:post, :options]
+
+    resource '/api/*/me/projects/*/logo_upload',
+             headers: :any,
+             expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+             methods: [:post, :options]
+
     resource '/api/*/me/chat_sessions',
              headers: :any,
              expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
              methods: [:post, :options]
+
+    resource '/api/*/me/ghost_sessions',
+             headers: :any,
+             expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+             methods: [:post, :options],
+             credentials: true
 
     resource '/api/*/me/messages',
              headers: :any,
@@ -87,8 +103,8 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
              methods: [:get, :post, :put, :patch, :options, :head]
 
     resource '/auth/*',
-      headers: :any,
-      expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
-      methods: [:get, :post, :put, :patch, :options, :head]
+             headers: :any,
+             expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+             methods: [:get, :post, :put, :patch, :options, :head]
   end
 end

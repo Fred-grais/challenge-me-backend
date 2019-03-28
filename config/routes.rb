@@ -13,6 +13,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :omniauth, only: [:create]
+  get '/auth/:provider/callback', to: 'omniauth#create'
+  get '/auth/failure', to: 'omniauth#failure'
+
   resources :projects, only: [:index, :show]
 
   resources :podcasts, only: [:index]
@@ -31,6 +35,19 @@ Rails.application.routes.draw do
         resources :messages, only: [:create]
 
         resources :conversations, only: [:index, :show, :create]
+
+        resources :ghost_sessions, only: [:create]
+
+        resources :avatars_uploads, only: [:create]
+
+
+        resources :projects, only: [], module: :projects do
+          member do
+            resources :logo_upload, only: [:create]
+            resources :pictures_uploads, only: [:create]
+          end
+        end
+
       end
     end
   end

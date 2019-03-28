@@ -4,9 +4,9 @@ module Api
       class ChatSessionsController < Api::V1::MeController
 
         def create
-          if current_user.rocket_chat_user_id
+          if current_user.rocket_chat_details.present?
              render json: {
-               rocket_chat_auth_token: RocketChatInterface.new.generate_auth_token_for_user(current_user.rocket_chat_user_id)
+               rocket_chat_auth_token: RocketChatInterface.new.generate_auth_token_for_user(current_user.rocket_chat_details.rocketchat_id)
              }.convert_keys_to_camelcase
            else
              render json: {

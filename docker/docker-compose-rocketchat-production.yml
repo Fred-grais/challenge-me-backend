@@ -1,0 +1,16 @@
+version: '3'
+services:
+  rocketchat:
+    image: rocketchat/rocket.chat:latest
+    environment:
+      - MONGO_URL=mongodb+srv://admin:Futur123!@rocketchat-staging-bahtp.mongodb.net/rocketchat?retryWrites=true
+      - ROOT_URL=https://192.168.99.100
+      - Accounts_UseDNSDomainCheck=True
+    ports:
+      - 80:3000
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: chat
+        awslogs-region: eu-west-3
+        awslogs-stream-prefix: chat

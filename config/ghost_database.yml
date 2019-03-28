@@ -1,0 +1,10 @@
+default: &default
+  adapter: mysql2
+  host: ghost_db
+  username: root
+  password: example
+  pool: 5
+
+development:
+  <<: *default
+  database: ghost

@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show]
 
   def index
-    @users = User.all
+    @users = User.includes(:rocket_chat_details).all.with_attached_avatar
 
     render json: @users.as_json(preview: true, for_front: true)
   end

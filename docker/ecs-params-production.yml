@@ -1,0 +1,12 @@
+version: 1
+task_definition:
+  services:
+    web:
+      cpu_shares: 100
+      mem_limit: 300000000
+    rpc:
+      cpu_shares: 100
+      mem_limit: 300000000
+    anycable_go:
+      cpu_shares: 100
+      mem_limit: 300000000

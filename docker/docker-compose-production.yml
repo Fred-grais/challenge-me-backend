@@ -1,0 +1,66 @@
+version: '3'
+services:
+  web:
+    image: 'syland/challenge_me:backend'
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    restart: always
+    env_file:
+      - ../.env
+    ports:
+      - 80:3000
+    links:
+      - rpc:rpc
+      - anycable_go:anycable_go
+    environment:
+      - REDIS_URL=redis://challenge-me-staging.ckpmzg.0001.euw3.cache.amazonaws.com:6379/0
+      - ANYCABLE_WEBSOCKET_SERVER_URL=ws://anycable_go:8080/cable
+      - DB_HOST=challenge-me-staging.cnpgvl6hselb.eu-west-3.rds.amazonaws.com
+      - DB_USERNAME=challenge_me_staging
+      - DB_PASSWORD=Futur123!
+      - RAILS_ENV=production
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: challenge_me_backend
+        awslogs-region: eu-west-3
+        awslogs-stream-prefix: web
+    depends_on:
+      - rpc
+      - anycable_go
+  rpc:
+    image: 'syland/challenge_me:backend'
+    command: anycable
+    restart: always
+    env_file:
+      - ../.env
+    environment:
+      - REDIS_URL=redis://challenge-me-staging.ckpmzg.0001.euw3.cache.amazonaws.com:6379/0
+      - ANYCABLE_WEBSOCKET_SERVER_URL=ws://anycable_go:8080/cable
+      - DB_HOST=challenge-me-staging.cnpgvl6hselb.eu-west-3.rds.amazonaws.com
+      - DB_USERNAME=challenge_me_staging
+      - DB_PASSWORD=Futur123!
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: challenge_me_backend
+        awslogs-region: eu-west-3
+        awslogs-stream-prefix: rpc
+  anycable_go:
+    image: 'anycable/anycable-go:v0.6.0'
+    restart: always
+    ports:
+      - 8080:8080
+    links:
+      - rpc:rpc
+    environment:
+      - PORT=8080
+      - REDIS_URL=redis://challenge-me-staging.ckpmzg.0001.euw3.cache.amazonaws.com:6379/0
+      - ANYCABLE_RPC_HOST=rpc:50051
+    logging:
+      driver: awslogs
+      options:
+        awslogs-group: challenge_me_backend
+        awslogs-region: eu-west-3
+        awslogs-stream-prefix: anycable_go
+    depends_on:
+      - rpc

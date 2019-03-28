@@ -20,9 +20,16 @@ class Authentication::RegistrationsController < DeviseTokenAuth::RegistrationsCo
   # end
 
   # PUT /resource
-  # def update
-  #   super
-  # end
+  def update
+    super do |user|
+      user.manage_status
+    end
+
+  rescue AASM::InvalidTransition => e
+    render json: {
+      error: e.failures
+    }, status: :unprocessable_entity
+  end
 
   # DELETE /resource
   # def destroy
@@ -55,7 +62,7 @@ class Authentication::RegistrationsController < DeviseTokenAuth::RegistrationsCo
       end
     end
 
-    devise_parameter_sanitizer.permit(:account_update, keys: [:first_name, :last_name, :position])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:first_name, :avatar, :last_name, :position, :twitter_id, timeline: [items: [:internal_id, :title, :description, :date, :image_url]]])
   end
 
   # The path used after sign up.

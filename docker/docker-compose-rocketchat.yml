@@ -4,18 +4,18 @@ services:
     image: mongo:3.0
     command: mongod --smallfiles
     volumes:
-    - rocketchat_db_db:/data/db
-    - rocketchat_db_dump:/dump
+      - rocketchat_db_db:/data/db
+      - rocketchat_db_dump:/dump
   rocketchat:
     image: rocketchat/rocket.chat:latest
     environment:
-    - MONGO_URL=mongodb://rocketchat_db:27017/rocketchat
-    - ROOT_URL=https://192.168.99.100
-    - Accounts_UseDNSDomainCheck=True
+      - MONGO_URL=mongodb://rocketchat_db:27017/rocketchat
+      - ROOT_URL=https://192.168.99.100
+      - Accounts_UseDNSDomainCheck=True
     ports:
-    - 3001:3000
+      - 3001:3000
     depends_on:
-    - rocketchat_db
+      - rocketchat_db
 
 volumes:
   rocketchat_db_db:
