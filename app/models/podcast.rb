@@ -8,8 +8,8 @@ class Podcast < ApplicationRecord
   validates_uniqueness_of :title
 
   FULL_ATTRIBUTES = {
-      attributes: [:title, :description, :categories, :duration, :publishing_date, :content_url, :thumbnail_url, :original_link],
-  }
+    attributes: %i[title description categories duration publishing_date content_url thumbnail_url original_link]
+  }.freeze
 
   def self.take_random
     offset = rand(Podcast.count)

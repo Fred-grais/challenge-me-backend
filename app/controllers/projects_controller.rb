@@ -17,11 +17,9 @@ class ProjectsController < ApplicationController
 
   private
 
-    def set_project
-      @project = Project.includes(:user).find(params[:id])
+  def set_project
+    @project = Project.includes(:user).find(params[:id])
 
-      if @project.blank?
-        render_resource_not_found
-      end
-      end
+    render_resource_not_found if @project.blank?
+  end
 end

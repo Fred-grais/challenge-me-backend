@@ -3,7 +3,6 @@
 class User < ApplicationRecord
   include AASM
 
-
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
@@ -34,21 +33,21 @@ class User < ApplicationRecord
   # after_create :create_rocket_chat_user
 
   PREVIEW_ATTRIBUTES = {
-    attributes: [:id, :first_name, :last_name, :position],
+    attributes: %i[id first_name last_name position],
     methods: [:avatar_url]
-  }
+  }.freeze
 
   FULL_ATTRIBUTES = {
-    attributes: [:id, :email, :first_name, :last_name, :position, :status, :twitter_id, :timeline],
-    methods: [:rocket_chat_profile, :avatar_url]
-  }
+    attributes: %i[id email first_name last_name position status twitter_id timeline],
+    methods: %i[rocket_chat_profile avatar_url]
+  }.freeze
 
   PROJECT_ATTRIBUTES_PREVIEW = {
-    attributes: [:id, :first_name, :last_name, :position],
+    attributes: %i[id first_name last_name position],
     method: []
-  }
+  }.freeze
 
-  aasm column: "status" do
+  aasm column: 'status' do
     state :pending_activation, initial: true
     state :active
     state :inactive
@@ -75,9 +74,9 @@ class User < ApplicationRecord
   end
 
   def avatar_url
-    if self.avatar.attached?
-      blob = self.avatar.blob
-      variant = self.avatar.variant(UploadsVariants.resize_to_fit(width: 300, height: 300, blob: blob)).processed
+    if avatar.attached?
+      blob = avatar.blob
+      variant = avatar.variant(UploadsVariants.resize_to_fit(width: 300, height: 300, blob: blob)).processed
       Rails.application.routes.url_helpers.url_for(variant)
     end
   end
@@ -87,38 +86,38 @@ class User < ApplicationRecord
   end
 
   def full_name
-    [self.first_name, self.last_name].compact.map(&:capitalize).join(" ")
+    [first_name, last_name].compact.map(&:capitalize).join(' ')
   end
 
   def rocket_chat_profile
-    self.rocket_chat_details.as_json(for_front: true)
+    rocket_chat_details.as_json(for_front: true)
   end
 
   private
 
-    def after_activate
-      create_rocket_chat_user
-      create_ghost_user
-    end
+  def after_activate
+    create_rocket_chat_user
+    create_ghost_user
+  end
 
-    def missing_user_details?
-      !user_details_present?
-    end
+  def missing_user_details?
+    !user_details_present?
+  end
 
-    def user_details_present?
-      %w{first_name last_name position}.all? { |attr| self.send(attr).present? }
-    end
+  def user_details_present?
+    %w[first_name last_name position].all? { |attr| send(attr).present? }
+  end
 
-    def create_rocket_chat_user
-      unless self.rocket_chat_details.present?
-        new_rocket_chat_user = RocketChatInterface.new.create_user(self)
-        self.create_rocket_chat_details(rocketchat_id: new_rocket_chat_user.id, name: new_rocket_chat_user.username)
-      end
+  def create_rocket_chat_user
+    unless rocket_chat_details.present?
+      new_rocket_chat_user = RocketChatInterface.new.create_user(self)
+      create_rocket_chat_details(rocketchat_id: new_rocket_chat_user.id, name: new_rocket_chat_user.username)
     end
+  end
 
-    def create_ghost_user
-      unless self.ghost_credentials.present?
-        self.create_ghost_credentials(username: self.email, password: SecureRandom.hex(32))
-      end
+  def create_ghost_user
+    unless ghost_credentials.present?
+      create_ghost_credentials(username: email, password: SecureRandom.hex(32))
     end
+  end
 end

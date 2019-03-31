@@ -34,7 +34,6 @@ class UserTest < ActiveSupport::TestCase
   test "user has many conversations" do
     conv = FactoryBot.create(:conversation)
     conv2 = FactoryBot.create(:conversation)
-    conv3 = FactoryBot.create(:conversation)
 
     user = FactoryBot.create(:user)
 

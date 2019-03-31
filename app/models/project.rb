@@ -15,50 +15,47 @@ class Project < ApplicationRecord
 
   after_create :create_rocket_chat_group
 
-
   PREVIEW_ATTRIBUTES = {
-      attributes: [:id, :name, :description],
-      methods:  [:owner_preview, :logo_url]
-  }
+    attributes: %i[id name description],
+    methods: %i[owner_preview logo_url]
+  }.freeze
 
   FULL_ATTRIBUTES = {
-    attributes: [:id, :name, :description, :timeline],
-    methods: [:owner_full, :activity_sector_list, :challenges_needed_list, :rocket_chat_profile, :logo_url, :pictures_urls]
-  }
+    attributes: %i[id name description timeline],
+    methods: %i[owner_full activity_sector_list challenges_needed_list rocket_chat_profile logo_url pictures_urls]
+  }.freeze
 
   def owner_preview
-    current_user = self.user
+    current_user = user
 
-    User::PREVIEW_ATTRIBUTES.values.flatten.inject({}) do |h, attr|
+    User::PREVIEW_ATTRIBUTES.values.flatten.each_with_object({}) do |attr, h|
       h[attr] = current_user.send(attr)
-      h
     end
   end
 
   def owner_full
-    current_user = self.user
+    current_user = user
 
-    User::FULL_ATTRIBUTES.values.flatten.inject({}) do |h, attr|
+    User::FULL_ATTRIBUTES.values.flatten.each_with_object({}) do |attr, h|
       h[attr] = current_user.send(attr)
-      h
     end
   end
 
   def rocket_chat_profile
-    self.rocket_chat_details.as_json(for_front: true)
+    rocket_chat_details.as_json(for_front: true)
   end
 
   def logo_url
-    if self.logo.attached?
-      blob = self.logo.blob
-      variant = self.logo.variant(UploadsVariants.resize_to_fit(width: 200, height: 200, blob: blob)).processed
+    if logo.attached?
+      blob = logo.blob
+      variant = logo.variant(UploadsVariants.resize_to_fit(width: 200, height: 200, blob: blob)).processed
       Rails.application.routes.url_helpers.url_for(variant)
     end
   end
 
   def pictures_urls
-    if self.pictures.attached?
-      self.pictures.map do |picture|
+    if pictures.attached?
+      pictures.map do |picture|
         blob = picture.blob
         variant = picture.variant(UploadsVariants.resize_to_fit(width: 200, height: 200, blob: blob)).processed
         Rails.application.routes.url_helpers.url_for(variant)
@@ -68,20 +65,18 @@ class Project < ApplicationRecord
 
   private
 
-    def create_rocket_chat_group
-      unless self.rocket_chat_details.present?
-        handler_instance = RocketChatInterface.new
-        new_rocket_chat_group = handler_instance.create_group(self.name)
+  def create_rocket_chat_group
+    unless rocket_chat_details.present?
+      handler_instance = RocketChatInterface.new
+      new_rocket_chat_group = handler_instance.create_group(name)
 
-        begin
-          handler_instance.add_moderator_to_group(new_rocket_chat_group.id, self.user.rocket_chat_details.rocketchat_id)
-        rescue => e
-          unless e.message.include?("error-user-already-owner")
-            raise e
-          end
-        end
-
-        self.create_rocket_chat_details(rocketchat_id: new_rocket_chat_group.id, name: new_rocket_chat_group.name)
+      begin
+        handler_instance.add_moderator_to_group(new_rocket_chat_group.id, user.rocket_chat_details.rocketchat_id)
+      rescue StandardError => e
+        raise e unless e.message.include?('error-user-already-owner')
       end
+
+      create_rocket_chat_details(rocketchat_id: new_rocket_chat_group.id, name: new_rocket_chat_group.name)
     end
+  end
 end
